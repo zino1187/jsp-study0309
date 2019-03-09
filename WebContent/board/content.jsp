@@ -24,7 +24,7 @@
 	//따라서 content.jps?board_id=5  라 할지라도 실제적으로 
 	//숫자5가 아니라  "5" 와 같은 문자이다
 	String board_id=request.getParameter("board_id");
-	String sql="select * from where board_id=?";
+	String sql="select * from board where board_id=?";
 	
 	//쿼리 수행객체 준비
 	PreparedStatement pstmt=con.prepareStatement(sql);
