@@ -113,9 +113,10 @@ function send(){
 	  <!-- html문서에서 오직 name 만이 파라미터 전송 역할을 수행한다
 	  	즉 id는 불가능하다
 	   -->
-    <input type="text" name="writer" placeholder="작성자 입력...">
-    <input type="text" name="title" placeholder="제목입력...">
-    <textarea id="content" name="content" placeholder="Write something.." style="height:200px"></textarea>
+    <input type="text" name="writer" value="<%=rs.getString("writer")%>">
+    <input type="text" name="title" value="<%=rs.getString("title")%>">
+    <!-- textarea는 쌍으로 열고 닫는 형식의 태그이므로, 그 사이에 넣어야 한다 -->
+    <textarea id="content" name="content" placeholder="Write something.." style="height:200px"><%=rs.getString("content") %></textarea>
     
     <input type="button" value="Submit">
   </form>
