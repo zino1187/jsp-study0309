@@ -87,12 +87,20 @@ $(function(){
 	 CKEDITOR.replace('content');
 	 
 	 //버튼을 누르면....
-	 $("input[type='button']").click(function(){
-			send();	 	
+	 //jquery는 css의 선택자를 따른다..따라서 아이디는 동일하게 #접근
+	 $("#bt-del").click(function(){
+		if(confirm("삭제하실래요?")){
+			del();
+		} 	
 	 });
 	 
 });//문서가 로드되면...
 
+//서버측에 삭제를 요청한다!!
+function del(){
+	alert("나 불럿어?");
+	
+}
 //서버에 폼양식 전송하는 함수 정의!! 
 function send(){
 	//alert("나 눌렀어?");
@@ -118,12 +126,28 @@ function send(){
     <!-- textarea는 쌍으로 열고 닫는 형식의 태그이므로, 그 사이에 넣어야 한다 -->
     <textarea id="content" name="content" placeholder="Write something.." style="height:200px"><%=rs.getString("content") %></textarea>
     
-    <input type="button" value="Submit">
+    <input type="button" id="bt-edit" value="수정">
+    <input type="button" id="bt-del" value="삭제">
+    <input type="button" id="bt-list" value="목록">
   </form>
 </div>
 
 </body>
 </html>
+<%
+	rs.close();
+	pstmt.close();
+	con.close();
+%>
+
+
+
+
+
+
+
+
+
 
 
 
