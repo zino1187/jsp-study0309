@@ -1,3 +1,5 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.DriverManager"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -20,7 +22,13 @@
 	}
 	
 
-	//3단계) 쿼리문 수행 
+	//3단계) 쿼리문 수행 (내림차순으로 가져와 최근글을 먼저 보이게)
+	String sql="select * from board order by board_id desc";
+	PreparedStatement pstmt=con.prepareStatement(sql);
+	//select문일 때는 executeQuery() 사용해야 함
+	//select문의 수행결과로 ResultSet 객체가 메모리상에 테이블을 올려놓고
+	//접근하여 사용한다!!
+	ResultSet rs=pstmt.executeQuery();
 
 	//4단계) 닫기
 	
@@ -71,13 +79,15 @@ $(function(){
 			<th width="10%">작성일</th>
 			<th width="5%">조회수</th>
 		</tr>
-
+		<% 
+			rs.next();//커서 한칸 내리기
+		%>
 		<tr>
 			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td>50</td>
-			<td>50</td>
+			<td><%=rs.getString("title")%></td>
+			<td><%=rs.getString("writer") %></td>
+			<td><%=rs.getString("regdate") %></td>
+			<td><%=rs.getInt("hit") %></td>
 		</tr>
 		
 		<tr>
