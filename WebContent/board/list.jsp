@@ -30,7 +30,7 @@
 	//접근하여 사용한다!!
 	ResultSet rs=pstmt.executeQuery();
 
-	//4단계) 닫기
+	
 	
 %>
 <!DOCTYPE html>
@@ -80,15 +80,16 @@ $(function(){
 			<th width="5%">조회수</th>
 		</tr>
 		<% 
-			rs.next();//커서 한칸 내리기
+			while(rs.next()){//커서 한칸 내리기
 		%>
 		<tr>
 			<td>Jill</td>
-			<td><%=rs.getString("title")%></td>
+			<td><a href="/board/content.jsp"><%=rs.getString("title")%></a></td>
 			<td><%=rs.getString("writer") %></td>
 			<td><%=rs.getString("regdate") %></td>
 			<td><%=rs.getInt("hit") %></td>
 		</tr>
+		<%} %>
 		
 		<tr>
 			<td colspan="5">
@@ -100,6 +101,19 @@ $(function(){
 
 </body>
 </html>
+<% 
+	rs.close();
+	pstmt.close();
+	con.close();
+%>
+
+
+
+
+
+
+
+
 
 
 
