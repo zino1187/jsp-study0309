@@ -88,6 +88,12 @@ $(function(){
 	 
 	 //버튼을 누르면....
 	 //jquery는 css의 선택자를 따른다..따라서 아이디는 동일하게 #접근
+	 $("#bt-edit").click(function(){
+		if(confirm("수정하실래요?")){
+			edit();
+		} 	
+	 });
+	 
 	 $("#bt-del").click(function(){
 		if(confirm("삭제하실래요?")){
 			del();
@@ -102,11 +108,11 @@ function del(){
 	location.href="/board/delete.jsp?board_id=<%=rs.getInt("board_id")%>";
 }
 //서버에 폼양식 전송하는 함수 정의!! 
-function send(){
+function edit(){
 	//alert("나 눌렀어?");
 	$("form").attr({
 		"method":"post",
-		"action":"/board/regist.jsp"
+		"action":"/board/edit.jsp"
 	});
 	$("form").submit();//전송!!
 }
@@ -121,6 +127,8 @@ function send(){
 	  <!-- html문서에서 오직 name 만이 파라미터 전송 역할을 수행한다
 	  	즉 id는 불가능하다
 	   -->
+	 <%out.print("지금 보고있는 글의 id는 "+rs.getInt("board_id"));%>
+	<input type="hidden" name="board_id" value="<%=rs.getInt("board_id")%>">
     <input type="text" name="writer" value="<%=rs.getString("writer")%>">
     <input type="text" name="title" value="<%=rs.getString("title")%>">
     <!-- textarea는 쌍으로 열고 닫는 형식의 태그이므로, 그 사이에 넣어야 한다 -->
