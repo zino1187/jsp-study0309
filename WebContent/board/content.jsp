@@ -5,7 +5,7 @@
 	//1단계: 드라이버 로드 
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 
-	//단계: 접속 
+	//2단계: 접속 
 	String url="jdbc:oracle:thin:@localhost:1521:XE";
 	String user="jsp0309";
 	String pass="jsp0309";
@@ -16,6 +16,13 @@
 		out.print("접속실패");
 	}
 	
+	//3단계: 쿼리문 실행 
+	//목록에서 전송되어온 파라미터를 ?대신 대입!!
+	//http 통신으로 전송되는 데이터는 모두 문자취급한다 
+	//따라서 content.jps?board_id=5  라 할지라도 실제적으로 
+	//숫자5가 아니라  "5" 와 같은 문자이다
+	String board_id=request.getParameter("board_id");
+	String sql="select * from where board_id=?";
 
 %>
 <!DOCTYPE html>
