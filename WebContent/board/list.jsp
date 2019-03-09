@@ -1,4 +1,30 @@
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.DriverManager"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	//board 테이블의 모든 레코드 가져오기!!
+	
+	//1단계) 드라이버 로드 
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+	
+	//2단계)오라클 접속!!
+	//DriverManager는 접속을시도하는 객체임
+	String url="jdbc:oracle:thin:@localhost:1521:XE";
+	String user="jsp0309";
+	String pass="jsp0309";
+	Connection con=DriverManager.getConnection(url, user, pass);
+	if(con!=null){
+		out.print("접속성공");
+	}else{
+		out.print("접속실패");
+	}
+	
+
+	//3단계) 쿼리문 수행 
+
+	//4단계) 닫기
+	
+%>
 <!DOCTYPE html>
 <html>
 <head>
