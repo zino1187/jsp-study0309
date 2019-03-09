@@ -25,17 +25,23 @@
 	
 	//3단계: 쿼리문 실행 
 	PreparedStatement pstmt=con.prepareStatement(sql);
+	pstmt.setInt(1, Integer.parseInt(board_id));//바인드 변수가 지정
 	int result=pstmt.executeUpdate(); //delete 는 DML이므로... 
 	
 	//4단계: 닫기 
 	pstmt.close();
 	con.close();
 	
+	out.print("<script>");
 	if(result ==0){
-		out.print("삭제 실패");
+		out.print("alert('삭제실패');");
+		out.print("history.back();");
 	}else{
-		out.print("삭제 성공");
+		out.print("alert('삭제성공');");
+		out.print("location.href='list.jsp';");
 	}
+	out.print("</script>");
+	
 %>
 
 
