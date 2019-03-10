@@ -14,6 +14,58 @@ import com.itbank.model.domain.Board;
 
 public class BoardDAO {
 	
+	//한건 수정
+	public int update(Board board) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int result=0;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			String url="jdbc:oracle:thin:@localhost:1521:XE";
+			String user="jsp0309";
+			String pass="jsp0309";
+			con=DriverManager.getConnection(url, user, pass);
+			if(con ==null) {
+				System.out.println("접속 실패");
+			}else {
+				System.out.println("접속 성공");
+			}
+			//쿼리수행 
+			String sql="update board set writer=?, title=?,content=?";
+			sql+=" where board_id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, board.getWriter());
+			pstmt.setString(2, board.getTitle());
+			pstmt.setString(3, board.getContent());
+			pstmt.setInt(4, board.getBoard_id());
+			result=pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}				
+			
+		}
+		return result;
+	}
+	
+	
 	//한건 삭제 
 	public int delete(int board_id) {
 		Connection con=null;

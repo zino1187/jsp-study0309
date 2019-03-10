@@ -1,3 +1,5 @@
+<%@page import="com.itbank.model.domain.Board"%>
+<%@page import="com.itbank.model.repository.BoardDAO"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
@@ -19,31 +21,16 @@
 	out.print("내용은 "+content);
 	out.print("board_id "+board_id);
 	
-	//1단계) 드라이버 로드 
-	Class.forName("oracle.jdbc.driver.OracleDriver");
 	
-	//2단계) 접속 
-	String url="jdbc:oracle:thin:@localhost:1521:XE";
-	String user="jsp0309";
-	String pass="jsp0309";
-	Connection con=DriverManager.getConnection(url, user, pass);
-	if(con!=null){
-		out.print("접속성공");
-	}else{
-		out.print("접속실패");
-	}
-
-	//3단계) 쿼리문수행
-	String sql="update board  set  writer=?, title=?, content=?";
-	sql+=" where board_id=?";
-	PreparedStatement pstmt=con.prepareStatement(sql);
-	pstmt.setString(1, writer);
-	pstmt.setString(2, title);
-	pstmt.setString(3, content);
-	pstmt.setInt(4, Integer.parseInt(board_id));//문자를 숫자로 변환하여 처리
+	//클래스로 대체됨
+	BoardDAO boardDAO = new BoardDAO();
+	Board board =new Board(); //empty 비어있음
+	board.setWriter(writer);
+	board.setTitle(title);
+	board.setContent(content);
+	board.setBoard_id(Integer.parseInt(board_id));
+	int result=boardDAO.update(board);
 	
-	int result=pstmt.executeUpdate();//쿼리문 수행!!
-
 	out.print("<script>");
 	if(result ==0){
 		out.print("alert('수정실패');");
@@ -53,10 +40,7 @@
 		out.print("location.href='content.jsp?board_id="+board_id+"';");
 	}
 	out.print("</script>");
-	
-	//4단계) 닫기 
-	pstmt.close();
-	con.close();
+
 %>
 
 
