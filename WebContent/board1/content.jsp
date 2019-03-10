@@ -74,6 +74,11 @@ $(function(){
 		} 	
 	 });
 	 
+	 $("#bt-list").click(function(){
+		location.href="/board1/list.jsp";
+	 });
+	 
+	 
 });//문서가 로드되면...
 
 //서버측에 삭제를 요청한다!!

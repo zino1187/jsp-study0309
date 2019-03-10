@@ -14,6 +14,52 @@ import com.itbank.model.domain.Board;
 
 public class BoardDAO {
 	
+	//한건 삭제 
+	public int delete(int board_id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int result=0;//삭제 성공 여부를 담고 있는 변수
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			String url="jdbc:oracle:thin:@localhost:1521:XE";
+			String user="jsp0309";
+			String pass="jsp0309";
+			con=DriverManager.getConnection(url, user, pass);
+			if(con ==null) {
+				System.out.println("접속 실패");
+			}else {
+				System.out.println("접속 성공");
+			}
+			//쿼리문 수행 
+			String sql="delete from board where board_id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, board_id);//바인드 변수값 지정
+			result=pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}			
+		}
+		return result; //결과 반환
+	}
+	
 	//한건 레코드 가져오기!!
 	public Board select(int board_id) {
 		Connection con=null;
