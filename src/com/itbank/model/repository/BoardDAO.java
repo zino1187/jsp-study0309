@@ -23,6 +23,9 @@ import com.itbank.model.domain.Board;
 //2) 잘 만들어진 라이브러리를 이용하는 법(Apache DBCP)
 //3) Tomcat 과 같은 서버차원에서이미 지원하는 풀링을 쓰는 법
 //    특히 서버에서 지원하는 커넥션풀링은 JNDI를 이용한다!!
+// JNDI(Java Naming Directory Interface 의 약자)
+// 클래스 코드안에 데이터베이스 연동 정보를 두지 말고, xml과 같은 외부 설정
+// 파일에 정보를 두되, 이름을 붙여 필요할때마다 이름으로 접근하는 방법
 public class BoardDAO {
 	
 	//한건 수정
