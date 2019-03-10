@@ -1,42 +1,17 @@
+<%@page import="com.itbank.model.repository.BoardDAO"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
-	//1단계: 드라이버 로드 
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-
-	//2단계: 접속 
-	String url="jdbc:oracle:thin:@localhost:1521:XE";
-	String user="jsp0309";
-	String pass="jsp0309";
-	Connection con=DriverManager.getConnection(url, user, pass);
-	if(con!=null){
-		out.print("접속성공");
-	}else{
-		out.print("접속실패");
-	}
-	
-	//3단계: 쿼리문 실행 
-	//목록에서 전송되어온 파라미터를 ?대신 대입!!
-	//http 통신으로 전송되는 데이터는 모두 문자취급한다 
-	//따라서 content.jps?board_id=5  라 할지라도 실제적으로 
-	//숫자5가 아니라  "5" 와 같은 문자이다
+	//파라미터 받기!!
 	String board_id=request.getParameter("board_id");
-	String sql="select * from board where board_id=?";
-	
-	//쿼리 수행객체 준비
-	PreparedStatement pstmt=con.prepareStatement(sql);
-	//물음표인 바인드 변수값 지정 
-	//자바기본자료형 byte, short ,int ,long ,float, double
-	//기본자료형 마다 1:1 대응되는 wrapper 클래스가 잇다..
-	//예)  int - Integer , short  - Short 
-	// 왜 지원하나?? 자바에서는 기본자료형과 객체자료형간의 형변환을 가능하게 하기 위한
-	//레퍼클래스가 지원된다....
-	//Integer.parseInt() 문자열이었던 객체를 정수로 변환
-	pstmt.setInt(1, Integer.parseInt(board_id));
-	ResultSet rs=pstmt.executeQuery();
+
+	//클래스로 옮겨감...
+	BoardDAO boardDAO = new BoardDAO();
+	boardDAO.select(Integer.parseInt(board_id));
+
 	//rs에는 여러건이 아닌, 단 한건짜리 레코드가 들어있다, 여전히 커서는 위로 올라가있음
 	//따라서 사용전에 next() 내려야 한다!!
 	rs.next(); //한칸 전진!!

@@ -3,6 +3,7 @@ package com.itbank.model.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.itbank.model.domain.Board;
@@ -12,7 +13,75 @@ import com.itbank.model.domain.Board;
 //DAO (Data Access Object )
 
 public class BoardDAO {
-
+	
+	//한건 레코드 가져오기!!
+	public ResultSet select(int board_id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			String url="jdbc:oracle:thin:@localhost:1521:XE";
+			String user="jsp0309";
+			String pass="jsp0309";
+			con=DriverManager.getConnection(url, user, pass);
+			if(con ==null) {
+				System.out.println("접속 실패");
+			}else {
+				System.out.println("접속 성공");
+			}
+			
+			String sql="select * from board where board_id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, board_id);//바인드 변수 값 지정
+			rs=pstmt.executeQuery();//select문 실행
+			
+			//rs는 닫아야되므로, rs를 직접 반환하지 말고 레코드 1건을
+			//표현하는 데 사용되는 객체인 DTO를 이용하자!!
+			if(rs.next()) { //레코드가 있다면...
+				Board board = new Board();
+				
+				board.setBoard_id(rs.getInt("board_id"));
+				board.setWriter(rs.getString("writer"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setRegdate(rs.getString("regdate"));
+				board.setHit(rs.getInt("hit"));
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		}
+		return rs;
+	}
+	
 	//글 등록 메서드 정의!!
 	public int insert(Board board) {
 		int result=0; //실행 결과가 담긴 변수
