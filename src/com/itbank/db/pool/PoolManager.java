@@ -14,10 +14,21 @@ import javax.sql.DataSource;
  * 작성한다
  * */
 public class PoolManager {
+	private static PoolManager instance; //생성자르 막았으니, 은닉화의
+	//getter를 통해 인스턴스를 제공해주자!!
+	
 	InitialContext initx;//검색 객체
 	DataSource ds;//커넥션 객체를 관리하는 객체
 	
-	public PoolManager() {
+	public static PoolManager getInstance() {
+		if(instance==null) {//null이면 여기서 올린다!!
+			instance = new PoolManager();
+		}
+		return instance;
+	}
+	//생성자의 접근제한자를 private 으로 제한한다 왜?? new를 직접 못하게
+	//할려고..
+	private PoolManager() {
 		try {
 			initx=new InitialContext();//검색 객체 생성
 			ds=(DataSource)initx.lookup("java:comp/env/jdbc/oracle");
@@ -45,6 +56,7 @@ public class PoolManager {
 			e.printStackTrace();
 		}
 	}
+	//insert ,update ,delete
 	public void release(Connection con, PreparedStatement pstmt) {
 		try {
 			pstmt.close();
@@ -57,6 +69,7 @@ public class PoolManager {
 			e.printStackTrace();
 		}
 	}
+	//select
 	public void release(Connection con, PreparedStatement pstmt,ResultSet rs) {
 		try {
 			rs.close();

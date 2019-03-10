@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.itbank.db.pool.PoolManager;
 import com.itbank.model.domain.Board;
 
 //이 클래스는 오직 데이터베이스와 관련된 CRUD만을 수행하기 위한 전담객체로 정의한다
@@ -27,6 +28,7 @@ import com.itbank.model.domain.Board;
 // 클래스 코드안에 데이터베이스 연동 정보를 두지 말고, xml과 같은 외부 설정
 // 파일에 정보를 두되, 이름을 붙여 필요할때마다 이름으로 접근하는 방법
 public class BoardDAO {
+	PoolManager pool=PoolManager.getInstance();
 	
 	//한건 수정
 	public int update(Board board) {
@@ -35,12 +37,7 @@ public class BoardDAO {
 		int result=0;
 		
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			String url="jdbc:oracle:thin:@localhost:1521:XE";
-			String user="jsp0309";
-			String pass="jsp0309";
-			con=DriverManager.getConnection(url, user, pass);
+			con=pool.getConnection();
 			if(con ==null) {
 				System.out.println("접속 실패");
 			}else {
@@ -55,26 +52,10 @@ public class BoardDAO {
 			pstmt.setString(3, board.getContent());
 			pstmt.setInt(4, board.getBoard_id());
 			result=pstmt.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			if(pstmt!=null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(con!=null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}				
-			
+			pool.release(con, pstmt);//풀에 반납
 		}
 		return result;
 	}
@@ -87,12 +68,7 @@ public class BoardDAO {
 		int result=0;//삭제 성공 여부를 담고 있는 변수
 		
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			String url="jdbc:oracle:thin:@localhost:1521:XE";
-			String user="jsp0309";
-			String pass="jsp0309";
-			con=DriverManager.getConnection(url, user, pass);
+			con=pool.getConnection();
 			if(con ==null) {
 				System.out.println("접속 실패");
 			}else {
@@ -103,25 +79,10 @@ public class BoardDAO {
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, board_id);//바인드 변수값 지정
 			result=pstmt.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			if(pstmt!=null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(con!=null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}			
+			pool.release(con, pstmt);
 		}
 		return result; //결과 반환
 	}
@@ -133,12 +94,7 @@ public class BoardDAO {
 		ResultSet rs=null;
 		Board board=null; //반환되어야 하므로, 여기에 선언..
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			String url="jdbc:oracle:thin:@localhost:1521:XE";
-			String user="jsp0309";
-			String pass="jsp0309";
-			con=DriverManager.getConnection(url, user, pass);
+			con=pool.getConnection();
 			if(con ==null) {
 				System.out.println("접속 실패");
 			}else {
@@ -163,32 +119,10 @@ public class BoardDAO {
 				board.setHit(rs.getInt("hit"));
 			}
 			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(pstmt!=null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(con!=null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			pool.release(con, pstmt, rs);	
 		}
 		return board;
 	}
@@ -200,20 +134,7 @@ public class BoardDAO {
 		PreparedStatement pstmt=null;
 		
 		try {
-			//1단계) 드라이버 로드 
-			Class.forName("oracle.jdbc.drive.OracleDriver");
-			System.out.println("드라이버 로드 성공");
-			
-			//2단계) 접속 
-			String url="jdbc:oracle:thin:@localhost:1521:XE";
-			String user="jsp0309";
-			String pass="jsp0309";
-			con=DriverManager.getConnection(url, user, pass);
-			if(con ==null) {
-				System.out.println("접속 실패");
-			}else {
-				System.out.println("접속 성공");
-			}
+			con=pool.getConnection();
 			
 			//3단계) 쿼리문 수행
 			String sql="insert into board(board_id,writer,title,content)";
@@ -223,39 +144,12 @@ public class BoardDAO {
 			pstmt.setString(2, board.getTitle());
 			pstmt.setString(3, board.getContent());
 			result=pstmt.executeUpdate();//쿼리문 수행!!!
-			
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
-			
 			e.printStackTrace();
 		}finally {
-			//try문과 catch 문 모두~~이 영역은 피할 수 없다!!!
-			//따라서 이 영역이 db 닫는 최적의 장소이다..
-			//왜?? db는 언제난 닫아야 하므로..
-			if(pstmt !=null) { //메모리에 존재할때만..
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			if(con !=null) { //메모리에 존재할때만..
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			
+			pool.release(con, pstmt);
 		}
 		return result;
-		
-		
-		//4단계) 닫기 
-		
 	}
 }
 
