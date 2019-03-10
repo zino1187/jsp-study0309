@@ -106,7 +106,7 @@ function edit(){
     <input type="text" name="writer" value="<%=board.getWriter()%>">
     <input type="text" name="title" value="<%=board.getTitle()%>">
     <!-- textarea는 쌍으로 열고 닫는 형식의 태그이므로, 그 사이에 넣어야 한다 -->
-    <textarea id="content" name="content" placeholder="Write something.." style="height:200px"><%=rs.getString("content") %></textarea>
+    <textarea id="content" name="content" placeholder="Write something.." style="height:200px"><%=board.getContent() %></textarea>
     
     <input type="button" id="bt-edit" value="수정">
     <input type="button" id="bt-del" value="삭제">
@@ -116,12 +116,6 @@ function edit(){
 
 </body>
 </html>
-<%
-	rs.close();
-	pstmt.close();
-	con.close();
-%>
-
 
 
 
