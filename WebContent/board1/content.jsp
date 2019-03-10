@@ -1,3 +1,4 @@
+<%@page import="com.itbank.model.domain.Board"%>
 <%@page import="com.itbank.model.repository.BoardDAO"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
@@ -10,11 +11,9 @@
 
 	//클래스로 옮겨감...
 	BoardDAO boardDAO = new BoardDAO();
-	boardDAO.select(Integer.parseInt(board_id));
-
-	//rs에는 여러건이 아닌, 단 한건짜리 레코드가 들어있다, 여전히 커서는 위로 올라가있음
-	//따라서 사용전에 next() 내려야 한다!!
-	rs.next(); //한칸 전진!!
+	
+	//rs로 받환받지 말고, 대신 Board 로 받는다!!
+	Board board=boardDAO.select(Integer.parseInt(board_id));
 %>
 <!DOCTYPE html>
 <html>
@@ -80,7 +79,7 @@ $(function(){
 //서버측에 삭제를 요청한다!!
 function del(){
 	//alert("나 불럿어?");
-	location.href="/board1/delete.jsp?board_id=<%=rs.getInt("board_id")%>";
+	location.href="/board1/delete.jsp?board_id=<%=board.getBoard_id()%>";
 }
 //서버에 폼양식 전송하는 함수 정의!! 
 function edit(){
@@ -102,10 +101,10 @@ function edit(){
 	  <!-- html문서에서 오직 name 만이 파라미터 전송 역할을 수행한다
 	  	즉 id는 불가능하다
 	   -->
-	 <%out.print("지금 보고있는 글의 id는 "+rs.getInt("board_id"));%>
-	<input type="hidden" name="board_id" value="<%=rs.getInt("board_id")%>">
-    <input type="text" name="writer" value="<%=rs.getString("writer")%>">
-    <input type="text" name="title" value="<%=rs.getString("title")%>">
+	 <%out.print("지금 보고있는 글의 id는 "+board.getBoard_id());%>
+	<input type="hidden" name="board_id" value="<%=board.getBoard_id()%>">
+    <input type="text" name="writer" value="<%=board.getWriter()%>">
+    <input type="text" name="title" value="<%=board.getTitle()%>">
     <!-- textarea는 쌍으로 열고 닫는 형식의 태그이므로, 그 사이에 넣어야 한다 -->
     <textarea id="content" name="content" placeholder="Write something.." style="height:200px"><%=rs.getString("content") %></textarea>
     
