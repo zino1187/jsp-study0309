@@ -34,7 +34,7 @@
 	}
 
 	//3단계) 쿼리문수행
-	String sql="update set board writer=?, title=?, content=?";
+	String sql="update board  set  writer=?, title=?, content=?";
 	sql+=" where board_id=?";
 	PreparedStatement pstmt=con.prepareStatement(sql);
 	pstmt.setString(1, writer);
@@ -50,7 +50,7 @@
 		out.print("history.back();");
 	}else{
 		out.print("alert('수정성공');");
-		out.print("location.href='list.jsp';");
+		out.print("location.href='content.jsp?board_id="+board_id+"';");
 	}
 	out.print("</script>");
 	
