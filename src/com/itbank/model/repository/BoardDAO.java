@@ -15,11 +15,11 @@ import com.itbank.model.domain.Board;
 public class BoardDAO {
 	
 	//한건 레코드 가져오기!!
-	public ResultSet select(int board_id) {
+	public Board select(int board_id) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		
+		Board board=null; //반환되어야 하므로, 여기에 선언..
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
@@ -41,7 +41,7 @@ public class BoardDAO {
 			//rs는 닫아야되므로, rs를 직접 반환하지 말고 레코드 1건을
 			//표현하는 데 사용되는 객체인 DTO를 이용하자!!
 			if(rs.next()) { //레코드가 있다면...
-				Board board = new Board();
+				board = new Board();
 				
 				board.setBoard_id(rs.getInt("board_id"));
 				board.setWriter(rs.getString("writer"));
@@ -77,9 +77,8 @@ public class BoardDAO {
 					e.printStackTrace();
 				}
 			}
-		
 		}
-		return rs;
+		return board;
 	}
 	
 	//글 등록 메서드 정의!!
