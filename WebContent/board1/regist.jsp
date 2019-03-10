@@ -45,7 +45,7 @@
 	}
 	
 	//목록페이지를 재 요청 
-	response.sendRedirect("/board/list.jsp");
+	response.sendRedirect("/board1/list.jsp");
 %>
 
 

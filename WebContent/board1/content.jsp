@@ -105,14 +105,14 @@ $(function(){
 //서버측에 삭제를 요청한다!!
 function del(){
 	//alert("나 불럿어?");
-	location.href="/board/delete.jsp?board_id=<%=rs.getInt("board_id")%>";
+	location.href="/board1/delete.jsp?board_id=<%=rs.getInt("board_id")%>";
 }
 //서버에 폼양식 전송하는 함수 정의!! 
 function edit(){
 	//alert("나 눌렀어?");
 	$("form").attr({
 		"method":"post",
-		"action":"/board/edit.jsp"
+		"action":"/board1/edit.jsp"
 	});
 	$("form").submit();//전송!!
 }

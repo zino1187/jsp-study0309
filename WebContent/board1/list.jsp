@@ -58,7 +58,7 @@ tr:nth-child(even) {
 <script>
 $(function(){
 	$("button").click(function(){
-		location.href="/board/write.jsp";//글쓰기 폼 요청 
+		location.href="/board1/write.jsp";//글쓰기 폼 요청 
 	});//버튼을 클릭하면...
 	
 });//문서가 로드되면
@@ -84,7 +84,7 @@ $(function(){
 		%>
 		<tr>
 			<td>Jill</td>
-			<td><a href="/board/content.jsp?board_id=<%=rs.getInt("board_id")%>"><%=rs.getString("title")%></a></td>
+			<td><a href="/board1/content.jsp?board_id=<%=rs.getInt("board_id")%>"><%=rs.getString("title")%></a></td>
 			<td><%=rs.getString("writer") %></td>
 			<td><%=rs.getString("regdate") %></td>
 			<td><%=rs.getInt("hit") %></td>

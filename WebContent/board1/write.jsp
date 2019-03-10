@@ -56,7 +56,7 @@ function send(){
 	//alert("나 눌렀어?");
 	$("form").attr({
 		"method":"post",
-		"action":"/board/regist.jsp"
+		"action":"/board1/regist.jsp"
 	});
 	$("form").submit();//전송!!
 }
